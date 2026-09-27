@@ -1,0 +1,1045 @@
+Programmin language-> The language we need to do conversation with computer so machine understand only binary language or machina code
+1. Machine Level language (Binary language) it is low level language
+2. Assembly language Add A,B use assembler to convert to mll it is also low level 
+used in microprocessor
+3. High level language need compiler and interpreter 
+4.procedural programming language it follow certain procedure  it divide program in to small procedure
+Known as route or function
+5.Functional programming language writing block of code that ewe can reuse it 
+6.object orient programming based on object
+  class is an blue print of an object ,object is any real world entity that has propertie and behaviour or it is an instance of class
+7. scripting language it use interpreter 
+8. Statically typed language
+need to define the type of data object
+int a=5
+9. Dynamically typed it automattically figureout which type dof datatype it is
+ a=9   
+ 
+ Memory management
+ 1.if we make any primitive datatype i stored in stack no relation to heap
+ int age=25
+    STACK MEMORY                         HEAP MEMORY
+ ________________________              ________________________
+
+| Variable  | Value/Ref  |            | Address  | Actual Data |
+|===========|============|            |==========|=============|
+| age       | 25         |            |          |             |
+|___________|____________|            |__________|_____________|
+ 
+ 2. Object Instantiation using new (Standard Objects & Arrays)Whenever you use the new keyword (or use array literals like {1, 2, 3}), Java always bypasses optimization and creates a brand-new, unique duplicate object in the heap.
+    int[] array1 = {1, 2, 3};
+	int[] array2 = {1, 2, 3};
+
+	User user1 = new User("Sam");
+	User user2 = new User("Sam");
+           STACK                               HEAP
+  +---------------+                  +-------------------------------+
+
+  | array1: ref11 | ---------------> | [1, 2, 3]    (Object at ref11)|
+  +---------------+                  +-------------------------------+
+
+  | array2: ref22 | ---------------> | [1, 2, 3]    (Object at ref22)|
+  +---------------+                  +-------------------------------+
+
+  | user1:  ref33 | ---------------> | User("Sam")  (Object at ref33)|
+  +---------------+                  +-------------------------------+
+
+  | user2:  ref44 | ---------------> | User("Sam")  (Object at ref44)|
+  +---------------+                  +-------------------------------+
+
+  Identity Check: (array1 == array2) is FALSE | (user1 == user2) is FALSE
+
+ 3.: String Literals (The String Constant Pool)
+   To save memory, Java treats String literals uniquely. The heap contains a protected zone called the String 
+   Constant Pool (SCP). If a string value already exists in this pool, Java makes new variables point to the existing 
+   instance instead of replicating it.
+   
+   String s1 = "Alice";
+   String s2 = "Alice";
+         STACK                            HEAP (String Constant Pool)
+  +---------------+                  +-------------------------------+
+
+  |   s1: ref55   | ---------------> | "Alice"      (Object at ref55)|
+  +---------------+                  +-------------------------------+
+
+  |   s2: ref55   | ----------------/ 
+  +---------------+                  
+
+  Identity Check: (s1 == s2) is TRUE
+ 
+ 4.String Creation with new String()
+   If you force a String to form using the new keyword,
+   Java is forced to skip the String Pool check and generate a
+   standard, independent object directly in the main heap area.
+   
+   String s1 = "Alice";
+String s3 = new String("Alice");
+
+          STACK                            HEAP (Main area + String Pool)
+  +---------------+                  +-------------------------------+
+
+  |   s1: ref55   | ---------------> | Pool: "Alice" (Object ref55)  |
+  +---------------+                  +-------------------------------+
+
+  |   s3: ref66   | ---------------> | Main Heap:    (Object ref66)  |
+  +---------------+                  +-------------------------------+
+
+  Identity Check: (s1 == s3) is FALSE
+ 
+ 5. Reference Assignment (Alias Linking)
+ When you assign one non-primitive variable directly to another 
+ using =, no new object is created. You are simply copying the memory 
+ address pointer. Both variables become aliases for the exact same object.
+   
+   User u1 = new User("Bob");
+User u2 = u1; // Copying the pointer
+        STACK                               HEAP
+  +---------------+                  +-------------------------------+
+
+  |   u1: ref77   | ---------------> | User("Bob")  (Object at ref77)|
+  +---------------+                  +-------------------------------+
+
+  |   u2: ref77   | ----------------/ 
+  +---------------+                  
+
+  Identity Check: (u1 == u2) is TRUE
+
+Summary Rules of Thumb
+1. any object allocated seprate memory in heap except string literal in scp where dupicate not allow 
+  and it is immutable that is if we changed value so new object created and memory address chnage in it 
+  it not do Change in same object so like other object 
+  if we do change in assign value by one non primitive to other
+  so initial value is unchanged in it
+  immutable
+  String a="yash"
+  sout(a)="yash"
+  String b=a
+  b="hello"
+  sout(a)=yash
+  sout(b)=hello
+  
+  muttable
+  int arr1[]={1,2,3}
+  sout(arr1)=>{1,2,3}
+  int arr2[]=arr1
+  int arr2[]={4,5,6}
+  sout(arr1)={4,5,5}
+2. any object assign there memory address not value by assignment operator
+3. == in primitive compare value and non primitive compare address
+   
+ Algoritm 
+ It is series of step that we follow to solve any problem
+ 1. Brute force ->try every possiblity
+ 2. Greedy algorithm-> perform best possible way or divided in best optimal way
+ 
+ Pseudocode
+ it is the mimic of code
+ 
+ flowchart 
+ it is diagramatically step of algorithm-
+ oval-> start/end
+ arrow
+ parellogram ->input/output
+ rectangle->process
+ diamond ->decision formation
+ 
+ 
+ java
+ in 1991 james gosling and its team known as green team in sun microsystem make a language known as in green talk in 1995 named java from coffee  beans name as java
+ it is oop language
+ 
+ jdk->have java development tools,java virtual machine and library inside java runtime environmnet
+  
+ .java->compiler(javac in jdt)->.class(byte code)->jvm[{class loader(load all other class after main class go in memory)},{[byte code verifier(To verify byte code like if we have any damage)]},{just in time compliler[the compliler that convert to mll very strategically to avoid repetative task]}]
+ byte code is platform independent jvm is platform dependent
+  
+  in ordder to generate byte code in different package 
+  javac -d ../bin newclass.java
+  java -classpath ../bin newclass
+ 
+ intro
+ class Myfirstprogram{
+   public static void main(String []args){
+     System.out.println("Hello world");
+    }
+ }
+ or
+  class Myfirstprogram{
+   public static void main(String args[]){
+     System.out.println("Hello world");
+	 Myprintprogram obj=new Myprintprogram();
+	 obj.printfunction()
+    }
+ }
+  class Myprintprogram{
+   public void printfunction(){
+     System.out.println("yash");
+    }
+ }
+  access specifier->public ,private ,protectected
+  static method is used to call without making an object it is easily call by class name
+  void no return type
+  main we fixed initialize method name
+  string args[] it is commandline argument so we pass parameter at runtime 
+  java Myfirstprogram yash jain-> access by args[0]
+  
+  comment
+  1.single line comment //
+  2. multiline comment /*   */
+  
+  1byte=8bit
+  Decimal-> base 10(0-9)
+  octal-> base 8(0-7)
+  binary-> base 2(0-1)
+  haxadecimal-> base 16(0-15)
+
+  so every value stor in memory in binary
+  so it go and store in heap in binary making a blog which contain binary 
+  so we take it from refrence address
+  
+  
+  variable
+  container that store value
+  a=25
+  
+  literal
+   it is constant or fixed value or synthetic representation of boolean , numeric, character, or string data
+  1. integral lliteral(byte 1byte,int 4 bytes,short 2 bytes,long 8 bytes)  so for range we find by -2^n-1 to 2^n-1 -1
+     int a=6
+	 to make it octal add 0 as prefix int a=06
+	 tomake it hexadecimal int a=0x6
+	 to make binary in a=ob6
+  2. floating point literal 
+     float a=34.4f (4 bytes)
+	 double a=392.392(8 bytes)
+  3.char literal
+    char ch='a'(2 bytes)
+	there is verious standard so we use unicode as standard 
+	char ch='\u0061' that represent a
+	'\u0000'(lowest),'\uffff'(highest)
+  4.string literal
+      strign s="Hello"
+  5. boolean literals
+      boolean b= true  (1 bit)  
+  Datatype
+  primitive datatype that is predefined;like(int char float)
+  non primitive datatype that is not predifined that is defined by user like array object string
+  
+  type casting 
+  widening or type conversion or type casting implicit big byte can take small byte for example long store int value
+	narrowing or type casting explicit by force fully store big valuue in small short z= (short)32769 in that case it wrap and take the rangwe as circuler and store so for this it store -32767
+	 
+  mixed mode operation
+  sout(10+30 +"My name is "+"yash jain" +10 +40);
+  40my name is yash jain1040
+  
+  variable
+  start with letter,digit,undercore,dollar
+  must begin with a letter 
+  
+  constant
+  final int s=34;
+  so it never reinizalise
+  
+  
+  variable
+  local variable-> variable that define inside particualar scope 
+  like in method so access inmethod
+  instance variable -> non static global variable(instance variable) canot access in static method directly it need an oblect
+  its value is instance specific 
+  static variable=> static class level can access in both static and non static method and it declare as static and access by direct class name 
+  its value is share among instance
+   
+   
+  input/outut
+  for input we use scanner class which is present in utils package
+  Scanner sc= new Scanner(System.in);
+  String name =sc.nextLine();
+  String name =sc.next(); take one word only
+  int a=sc.nextInt();
+  char a=sc.next.charAt(0);
+   in next dlimiter is spaceit stop at \n it not ignore it
+ so afteer next we write nextline to consume \n
+ in nextline it is \n
+ System.out.println();
+ System.out/printf("Number is %.2f",num)
+ 
+ 
+  
+  
+
+  operator
+  1.unary operator
+   prefix ++a,--a 
+   postfix a++.a--   
+   a=a-1 or a=a+1
+   tilt operator
+   ~val=-(val+1)
+   ++ = +
+   -- = +
+   +- = -
+   -+ = -
+  2.Arithmetic
+  +,-,/,%(reminder operator),*
+  5%10=5
+  3.shift operator
+  >>,or <<
+  0110>>2=0001
+  4.relational
+  <,>,>=,<=,==,!=,===,!==
+  5.logical 
+    logical and && it is like multiply so anyone zero it make zero
+	logical or ||
+	logical not !(make opposite in boolean)
+  6. Ternary operator
+     conditon?true so this run:otherwise this run
+  7. Assignment operator
+       =
+	   X11=x11+10
+	   short hand operator
+	   x11+=10
+	   
+   precedence and associativity
+   precedence 
+   1.unary 
+   2.arithmetic
+   3.shift
+   4.relational'
+   5.bitwise
+   6.logical
+   7.Ternary
+   8.Assignment
+   Assocativity maximum time left to right
+   
+ 
+ 
+ Packages
+ To make maintainable and do modularization or sepeartion of code or organize of code by grouping similar type of classes,interface and subpackages 
+ 1.User defined packages
+ 2.In Built Packages that already built in java
+ 
+ java
+ 1. lang
+ 2. utils
+ 3.awt
+ etc
+ java.lang
+ 
+ How we access package
+ import package.*;
+ import package.classname;
+ 
+ in java file 
+ we write 
+ package com.college; 
+ then run javac -d . MyMain.java so it make it 
+ class file in some package
+ 
+ then we simply import make object and use it
+ 
+
+  
+ Decision making(conditional statement) and loops
+ if(){
+ }else(){
+ }elseif{
+ }
+ int x=3
+ switch(x){
+ case 3:
+    sout();
+	break;
+  case 2:
+    sout();
+	break;
+  default:
+   sout();  
+    	
+ }
+ 
+ loops
+ for(int i=0;i<10;i++)
+ {
+ 
+ }
+ int i=0;
+ while(i<10)
+ {
+ i++;
+ }
+ int i=0
+ do{
+ 
+ i++;
+ }while(i<10)
+ 
+ for each
+ for(int element:arr){
+ sout(element)
+ }
+ 
+ break;
+ continue;
+ 
+ function
+ block of code that perform specific task
+ main advantage is code reusablitiy
+ predefined and userdefined
+ 
+ actual argument that we pass during calling 
+ formal argument that we recieve in function defination
+ 
+ pass by value
+ when we call with actual argument a the declaration 
+ have formal argumnet b so we make copy then pass so change in value in b doesnot effect in a
+ primitive datatype are pass by value
+ 
+ pass by refrence by passing non primitive datatype
+ object array so if declare any value print it then call other function
+ that incriment in it then after that we print so the value that they increment on increment function
+ got printed
+ 
+ type promotion long value in calling and integer in declaration so big byte not store in small byte
+ so we pass small to store in big 
+ 
+ function overloading
+ same name function of methods differ by number of argument and type of argument
+ 
+ ambiguty
+ so we have two function in which we have float parameter in both function
+ but different parameter so when we call so it confuse which one need to call
+ this is call ambiguty in function overloadig
+ 
+ 
+ string 
+  string is a class so we declare is an object
+ sequence of character
+ "jgffghj"
+
+ String name="yash";
+ it is an string literal whose value stored in string constant poll
+ so duplicate value is not allow and it is immutable
+ and any value that have no refrences so it delete by garbage collector
+ String name =new String("hello") it is allocated in heap and it copy make in string constanat poll if it not exist 
+ just internallyy otherwise work as properly in heap
+ so duplicate is allow and it is muttable
+ == compare refrence
+ .equals compare value
+ 
+ functions
+ name.toLowerCase()
+ name.toUpperCase()
+ name.charAt(0);
+ name.indexOf('h')
+ lastIndexOf('h')
+ name.length();
+ char ch[]=name.toCharArray();
+ name1.compareTo(name2)it compare each character and return 
+ the number oof non matched character 
+ s1 yash s2 ya so 2
+ s1 ya s2 yash so -2
+ s1 yash s2 aysh so ascii of y-a
+ name.trim();
+ name.startsWith("Shashwat");
+ endsWith()
+ substring -> continuation of sub sting ab but ba not order matter
+ name.subString(1,3) so it return as last exlusive
+ String mylocations="1,2,3,4,5"
+ String myLocation[]=mylocations.split(",")
+ 
+ string builder(non synchronize so not safe in multithread) and string buffer(synchronize)
+ muttable so it is very fast
+ StringBuilder name1= new stringBuilder("yash")
+ 
+concatenation 
+2+4+"hello"+64+89.0
+6hello6489.0
+ 
+ 
+Datastructure
+way to store and organize data for efficient access and modification
+
+
+Array 
+it is a linear data structure to store similar type of data
+in continous fashionindex start with 0
+                   ┌─────────────────────────────────────────┐
+    ELEMENTS /    │   10   │   20   │   30   │   40   │   50   │
+    VALUES        └────────┴────────┴────────┴────────┴────────┘
+                      ▲        ▲        ▲        ▲        ▲
+                      │        │        │        │        │
+    INDICES           0        1        2        3        4
+    
+    
+    ┌───────────────────────────┬───────────────────────────┐
+    │ Array Properties          │ Value                     │
+    ├───────────────────────────┼───────────────────────────┤
+    │ Total Length / Size       │ 5                         │
+    │ First Index               │ 0                         │
+    │ Last Index                │ 4 (Length - 1)            │
+    └───────────────────────────┴───────────────────────────┘
+int arr[]=new int[6];
+int arr[]={2,3,4};
+
+initially all value 0
+
+limitationn
+1.size fixed
+2.
+
+
+
+Dynamic array
+Arraylist
+Capacity vs. Size: 
+Capacity is the total space allocated in memory (e.g., 6 slots). Size is the number of elements currently inside (e.g., 5 items).
+The Growth Formula: When the size == capacity, the ArrayList automatically allocates a new array (usually 50% to 100% larger than the
+old one), copies the old data into it, and deletes the old array.
+    1. INITIAL STATE (Capacity = 4, Size = 3)
+    ┌───────────┬───────────┬───────────┬───────────┐
+    │    "A"    │    "B"    │    "C"    │  [Empty]  │  ◄── 3 elements stored
+    └───────────┴───────────┴───────────┴───────────┘
+          0           1           2           3      ◄── Indices
+
+
+    2. ADDING "D" (ArrayList is now full! Size = 4)
+    ┌───────────┬───────────┬───────────┬───────────┐
+    │    "A"    │    "B"    │    "C"    │    "D"    │
+    └───────────┴───────────┴───────────┴───────────┘
+          0           1           2           3      
+
+
+    3. ADDING "E" (Automatic Resizing / Rescaling Triggered)
+       * A new, larger internal array is created behind the scenes.
+       * Old elements are copied over to the new array.
+    ┌───────────┬───────────┬───────────┬───────────┬───────────┬───────────┐
+    │    "A"    │    "B"    │    "C"    │    "D"    │    "E"    │  [Empty]  │
+    └───────────┴───────────┴───────────┴───────────┴───────────┴───────────┘
+          0           1           2           3           4           5
+
+ArrayList<Integer> arr=new ArrayList<>();
+arrayList.add(5);
+arrayList.get(0);
+arrayList.size();
+arraylist.set(1,20); update
+arraylist.remove(1); so it delete and shift automatically
+arraylist(0,100); it do insert and shift
+
+multidimensional array
+arr[3][2][3]
+========================================================================================
+                      3D MULTIDIMENSIONAL ARRAY: arr[3][2][3]
+========================================================================================
+
+ [LEVEL 1] ──► Top-level Array (Size: 3)
+               ┌───────────────┬───────────────┬───────────────┐
+               │    Index 0    │    Index 1    │    Index 2    │
+               └───────┬───────┴───────┬───────┴───────┬───────┘
+                       │               │               │
+                       ▼               ▼               ▼
+ [LEVEL 2] ──► Second-level Arrays (Each has a Size of 2)
+                   ┌───┴───┐       ┌───┴───┐       ┌───┴───┐
+                   │ 0 │ 1 │       │ 0 │ 1 │       │ 0 │ 1 │
+                   └─┬─┴─┬─┘       └─┬─┴─┬─┘       └─┬─┴─┬─┘
+                     │   │           │   │           │   │
+                     ▼   ▼           ▼   ▼           ▼   ▼
+ [LEVEL 3] ──► Actual Data Arrays (Each has a Size of 3)
+                   ┌─┴─┐ ┌─┴─┐     ┌─┴─┐ ┌─┴─┐     ┌─┴─┐ ┌─┴─┐
+                   │0|1|2│ │0|1|2│     │0|1|2│ │0|1|2│     │0|1|2│ │0|1|2│
+                   └─────┘ └─────┘     └─────┘ └─────┘     └─────┘ └─────┘
+                    ▲   ▲
+                    │   │
+                    │   └── [0][0][1]
+                    │
+                    └────── [0][0][0]
+
+----------------------------------------------------------------------------------------
+★ THE KEY TRICK: "Data is always in the last level"
+----------------------------------------------------------------------------------------
+To find a specific value like arr[0][0][2] (highlighted in your image):
+  1. Go to Index 0 at Level 1.
+  2. Follow it down to Index 0 at Level 2.
+  3. Follow that down to Index 2 at Level 3 ──► This is where your actual data lives!
+========================================================================================
+
+represent also as matrix 
+int arr[][]=new int[2][3]
+arr.length=2
+arr[0].length=3
+
+
+Jagged Array
+different number of column in each row
+int jagg[][]=new int [3][]
+jagg[0]=new int[2]
+jagg[2]=new int[3]
+
+
+
+Object oriented programming
+class is a blue print
+object is an instance of it or any real world entity
+that has properties and behaviour
+
+class Vehicle{}
+
+Vehicle v=new Vehicle();
+
+constructor
+inside class outside method
+it is used to initialize value
+Defaut constructor
+Vehicle(){
+ speed=40
+}
+Vehicle v=new Vehicle();
+
+prametrized constructor
+Vehicle(int a){
+this.speed=a;
+}
+Vehicle v1=new Vehicle(4);
+
+copy constructor
+copy the constructor for one instance and copy to other instance
+
+Vehicle(Vehicle that)
+{
+this.speed=that.speed;
+}
+Vehicle v2=new Vehicle(v1);
+
+this()
+it is used to call from one constructor to other
+to make constructor chaining
+
+
+
+wrapper classes
+  Apredefined class that wraps or  encapsulate a primitive datatype
+  Wrapper classes in Java are predefined classes in the java.lang package that allow primitive
+  data types to be represented as objects.
+  Integer myAge=33
+  Autoboxing and Unboxing
+  Java automates the conversion between primitive types 
+  and their respective wrapper objects to minimize boilerplate code.
+  Autoboxing: The automatic conversion of a primitive type into an object of its corresponding wrapper class.
+  Unboxing: The automatic conversion of a wrapper object back into its raw primitive value
+  
+  // Autoboxing: Primitive 'int' to 'Integer' object
+int primitiveInt = 25;
+Integer wrappedInt = primitiveInt; 
+
+// Unboxing: 'Integer' object back to primitive 'int'
+Integer objectInt = Integer.valueOf(50);
+int regularInt = objectInt; 
+
+Common Utility Methods ExampleWrapper classes are heavily used for data transformation, especially when dealing with text inputs:
+  // Converting a String to a primitive int
+int number = Integer.parseInt("123");
+
+// Converting a primitive to a String
+String text = Integer.toString(456);
+
+// Comparing two values
+int comparison = Integer.compare(10, 20); // Returns a negative value since 10 < 20
+
+
+
+Nested class
+// Save this file as Main.java
+
+/*
+================================================================================
+                         NESTED CLASSES IN JAVA
+================================================================================
+A nested class is a class declared inside another class. They are split into:
+
+1. Static Nested Class
+   - Declared with the 'static' keyword.
+   - Does NOT have access to non-static variables/methods of the outer class.
+   - Can be instantiated without creating an outer class object.
+
+2. Inner Class (Non-Static Nested Class)
+   - Declared without the 'static' keyword.
+   - Has direct access to all variables/methods of the outer class (even private ones).
+   - Requires an outer class object to be instantiated.
+================================================================================
+*/
+
+class Outer {
+    String outerField = "Outer Class Instance Field";
+    static String staticOuterField = "Outer Class Static Field";
+
+    // 1. STATIC NESTED CLASS
+    static class StaticNestedClass {
+        void display() {
+            // System.out.println(outerField); // ERROR: Cannot access non-static field
+            System.out.println("Inside Static Nested Class: " + staticOuterField);
+        }
+    }
+
+    // 2. INNER CLASS (NON-STATIC)
+    class InnerClass {
+        void display() {
+            // Can access both static and instance fields freely
+            System.out.println("Inside Inner Class: " + outerField + " | " + staticOuterField);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Instantiating the Static Nested Class (No Outer object needed)
+        Outer.StaticNestedClass staticNested = new Outer.StaticNestedClass();
+        staticNested.display();
+
+        // Instantiating the Inner Class (Requires an Outer object first)
+        Outer outerObj = new Outer();
+        Outer.InnerClass inner = outerObj.new InnerClass();
+        inner.display();
+    }
+}
+
+
+ Modifiers
+ Access specifiers
+ 1.Private ->not access by outside class means within the class
+ 2.Default-> not written anything, within the package
+ 3.protected->within package and outside the package through child class
+ 4.public ->from anywhere it is accessable
+ Non Access specifiers
+ these are of 7 type
+ their are used with classes, methods, variable, constructor to provide 
+ information about their behaviour to jvm
+ 
+ 1.static
+    for memory management,
+	Memory is allocated only once when the class is loaded.
+	No object creation is needed to access static members; use the class name directly.
+	Static methods and block can’t access non-static members directly. means need to create and object
+	Static methods can’t be overridden because they belong to the class, not instances.
+	,and it can be shared by all object so change in value by one 
+	instace effect other also
+	String name;          // Unique per object
+    static String college = "XYZ University"; // Shared by all objects
+   it is used as variable,class,block,method
+    Variables=shared among instance and data common for all object
+	blocks=sed to initialize static variables or perform configuration tasks before the main method executes
+	Static{
+	api="https://ghiliu.com"
+	}
+	method cannot be overridden
+	Static Nested Classes =static inside another class. It can be accessed without creating an object of the outer class
+	simply to call non static we need to create object but for 
+	static it is already created so need to do call by class or in same class directly
+	
+ 2. final 
+  variable=to make constant
+  method=to prevent overloading
+  class to prevent inheritance
+
+ 3.super
+   call my parent
+    - Represents the IMMEDIATE PARENT instance of the class.
+   - Used to call parent class variables, methods, and constructors.
+   super() to call constructor of parent
+   super.fun()
+   super.name
+   
+   
+ 4.this  
+   Represents the CURRENT instance of the class.
+   - Used to call current class variables, methods, and constructors.
+   
+   class Parent {
+    String name = "Parent Variable";
+
+    Parent() {
+        System.out.println("Parent Constructor called");
+    }
+
+    void show() {
+        System.out.println("Method inside Parent Class");
+    }
+}
+
+class Child extends Parent {
+    String name = "Child Variable";
+
+    Child() {
+        // 1. Invoking parent constructor using super()
+        // Must be the first statement in the constructor
+        super(); 
+        System.out.println("Child Constructor called");
+    }
+
+    void display() {
+        // 2. Accessing variables
+        System.out.println(this.name);  // Output: Child Variable
+        System.out.println(super.name); // Output: Parent Variable
+
+        // 3. Invoking methods
+        this.show();  // Calls inherited show() method (or overridden one)
+        super.show(); // Explicitly calls parent show() method
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Child obj = new Child();
+        obj.display();
+    }
+}
+   
+   
+   
+
+4 pillars of oops
+encapsulation
+encapsulate or wrap properties and behaviour to decide which 
+is access or not or change or not(Data hiding)
+we make private variable then getter and setter method to access it
+// Save this file as Main.java
+
+class Account {
+    // 1. Private variables hide data
+    private double balance = 1000.0;
+
+    // 2. Getter (Read access)
+    public double getBalance() {
+        return balance;
+    }
+
+    // 3. Setter (Write access with validation)
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Account acc = new Account();
+        
+        acc.deposit(500); // Controlled update
+        System.out.println("Balance: " + acc.getBalance()); // Controlled read
+    }
+}
+
+
+
+inheritance
+in which child or base class inherit properties
+by  extend keyword
+
+so by this common thing of mulitple class can inherit 
+from common class like dogand cat botyh eat so we make animal class
+
+ // Save this file as Main.java
+
+class Animal {
+    void eat() {
+        System.out.println("Eating...");
+    }
+}
+
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Barking...");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Dog d = new Dog();
+        d.eat();  // Inherited method
+        d.bark(); // Subclass method
+    }
+}
+================================================================================
+                       TYPES OF INHERITANCE IN JAVA
+================================================================================
+
+Java supports three primary types of class inheritance:
+
+1. Single Inheritance
+   - Description:   A subclass inherits from a single superclass.
+   - Visual Layout: A -> B
+
+2. Multilevel Inheritance
+   - Description:   A subclass inherits from a child class, creating a chain.
+   - Visual Layout: A -> B -> C
+
+3. Hierarchical Inheritance
+   - Description:   Multiple subclasses inherit from a single superclass.
+   - Visual Layout: A -> B and A -> C
+
+--------------------------------------------------------------------------------
+NOTE ON MULTIPLE INHERITANCE:
+Java DOES NOT support Multiple Inheritance with classes (e.g., Class C extending
+both Class A and Class B). This avoids the Diamond Problem, which causes 
+ambiguity when two parents have a method with the same signature. 
+
+However, multiple inheritance can be achieved in Java using Interfaces.
+================================================================================
+Any class you make it bydefault extends object class
+
+
+Abstraction
+it is used to hiding defination only show declaration
+it achieve by 2 way
+abstract classes achieve 0 to 100 % by extends abstract class of parent it have both abstract and non abstract method
+interface 100% by impliment interface it only have abstract method
+
+abstract class
+// Save this file as Main.java
+
+// 1. Abstract class (cannot be instantiated directly)
+abstract class Vehicle {
+    // Abstract method (has no body, must be implemented by subclass)
+    abstract void startEngine();
+
+    // Regular method (inherited normally)
+    void horn() {
+        System.out.println("Beep beep!");
+    }
+}
+
+// 2. Subclass providing the hidden implementation details
+class Car extends Vehicle {
+    @Override
+    void startEngine() {
+        System.out.println("Car engine started: Vroom!");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Vehicle v = new Vehicle(); // ERROR: Vehicle is abstract
+
+        Vehicle myCar = new Car();
+        myCar.startEngine(); // Hides implementation logic
+        myCar.horn();        // Calls inherited concrete method
+    }
+}
+
+by interface
+// Save this file as Main.java
+
+// 1. Interface (Achieves 100% abstraction)
+interface Animal {
+    void makeNoise(); // Public and abstract by default
+}
+
+// 2. Class implementing the interface
+class Cat implements Animal {
+    @Override
+    public void makeNoise() {
+        System.out.println("Meow!");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Animal a = new Animal(); // ERROR: Interfaces cannot be instantiated
+        
+        Animal myCat = new Cat();
+        myCat.makeNoise(); // Calls the concrete implementation
+    }
+}
+
+================================================================================
+         HOW INTERFACES SOLVE MULTIPLE INHERITANCE IN JAVA
+================================================================================
+
+Java bans multiple inheritance with CLASSES to avoid the "Diamond Problem." 
+If Class C extended both Class A and Class B, and both parents had a method 
+named "run()", Class C wouldn't know which parent's "run()" method to execute. 
+
+Interfaces completely solve this problem using the following rules:
+
+1. NO IMPLEMENTATION DETAILS (NO METHOD BODIES)
+   An interface only declares *what* a class should do, not *how* to do it. 
+   It has no code blocks inside its methods. Because there is no actual code 
+   to inherit, there is no conflict between parent behaviors.
+
+2. THE CHILD CLASS MAKES THE RULES
+   If Class C implements both Interface A and Interface B, Class C is forced 
+   to write the actual method body itself. The child class provides the one 
+   and only implementation.
+
+3. DUPLICATE METHODS COLLAPSE INTO ONE
+   If Interface A and Interface B both demand a method named "run()", the 
+   compiler doesn't get confused. From the child class's perspective, both 
+   interfaces are just asking for the same requirement. The child class 
+   implements "run()" exactly ONCE, fulfilling the contract for both parents 
+   at the same time.
+
+Summary: 
+Classes inherit implementation (which causes conflicts). Interfaces inherit 
+only specifications (which eliminates conflicts).
+================================================================================
+
+
+polymorphism
+
+================================================================================
+                         POLYMORPHISM IN JAVA
+================================================================================
+Polymorphism means "many forms". It allows an action to be performed in 
+different ways. There are two main types:
+
+1. Compile-Time Polymorphism (Method Overloading)
+   - Same method name, but different parameters within the same class.
+   - Handled by the compiler based on the arguments passed.
+
+2. Runtime Polymorphism (Method Overriding)
+   - Same method name and parameters, but redefined in a subclass.
+   - Handled at runtime based on the actual object type created.
+================================================================================
+
+
+class Calculator {
+    // 1. COMPILE-TIME POLYMORPHISM (Overloading)
+    // Add two integers
+    int add(int a, int b) {
+        return a + b;
+    }
+    
+    // Add three integers (same name, different parameters)
+    int add(int a, int b, int c) {
+        return a + b + c;
+    }
+}
+
+class Animal {
+    // 2. RUNTIME POLYMORPHISM (Overriding)
+    void sound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Testing Compile-Time Polymorphism
+        Calculator calc = new Calculator();
+        System.out.println(calc.add(5, 10));     // Calls 2-parameter method
+        System.out.println(calc.add(5, 10, 15)); // Calls 3-parameter method
+
+        // Testing Runtime Polymorphism (Upcasting)
+        Animal myAnimal = new Dog(); 
+        myAnimal.sound(); // Output: "Dog barks" (Decided at runtime)
+    }
+}
+
+
+

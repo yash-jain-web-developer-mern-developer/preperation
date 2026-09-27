@@ -1,0 +1,1190 @@
+In 2002 microsoft introduce web forms but we need modularity
+so in 2009 we make mvc 
+then in 2014 web api
+then in 2016 dotnet core introduce
+previously dotnet then in dotnet 6 is Dot net core is crossplatform and opensource framework and support dependency injection
+support microcervices,clound support
+model is class or business entitites,view->presentation logic,controller,business logic
+in launchsetting it have setting when we run our app by default we use setting of kestrel webserver setting
+
+
+In program.cs
+Middleware
+it is a function which execute on every request which is present in http request pipeline
+1.default middleware
+   useRouting()
+   useAuthentication
+   useAuthorization
+   usestaticfiles
+   usegttpsredirection
+   useexceptionhandler
+   usecors
+2.custom middleware 
+   A.inline-make in program.cs
+   B.class-make class we use in controller,servise
+ first we make our builder in args automatically pass of launch setting then build our application then run our application
+ var builder=WebApplication.createBuilder(args);
+ var app=builder.build();
+ app.Run();
+ we declare middle ware by the application predifined method run or use run not next parameter so it not allow to run next midlleaare where as use have next parameter
+ app.Run(asyns(context)=>{
+ await context.Response.writeasync("welcome");
+ })
+ app.use(asyns(context,next)=>{
+ await context.Response.writeasync("welcome");
+ await next(context);
+ })
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Routing
+ it use to map the url request to their corresponding controller and its action method to give response
+ 
+ = url + http methods
+ 1. conventional based routings
+ which convention or pattern it follow
+ in program.cs
+ builder.services.AddControllerswithViews();
+ app.useRouting();
+ app.MapControllerroute(
+ name:"default",
+ pattern:"{controller=Home}/{action=Index}/{id?}");`
+ 
+ 
+ 2. attribute based routing
+     mostly use when we use api
+    [Route] attribute is used to define route 
+    builder.services.Addcontrollerwithviews();
+	app.mapcontrollers()
+	above the action method 
+	[Route("")]
+	[Route("Home")]
+	[Route("Home/index")]
+	[Route("Home/index/{id?}")]
+	[Route("~/")]->empty url if i define controller route above c ontroller
+	[Route("~/Home")]
+   also write above conroller
+   
+   also we write token so it automatically take controller and action method name
+   [Route("[controller]")]
+   [Route("[action]")]
+   [Route("[controller]/[action]")]
+   
+   we can use both routing in singke application
+   
+   Routing methods
+   These are used to do particular logic or custom logic on particular url
+    it is used when we create minimal api or small code that not require controller
+	
+	Instead of creating a Controller → Action Method → Route, you directly define the endpoint in Program.cs.
+	
+   app.Map("/Home",()=>"Hello World"); it is used for all method with this url
+   app.MapGet("/Home",()=>"Hello World");
+   app.MapPost("/Home",()=>"Hello World");
+   app.MapPut("/Home",()=>"Hello World");
+   app.MapDelete("/Home",()=>"Hello World");
+   
+   OR
+   to work complex or more line logic
+   app.useRouting();
+   app.UseEndpoints(endpoints=>
+   {
+   endpoints.MapGet("/Home",async(context)=>
+   await context.Response.WriteAsync("This is Home page");
+   });
+     endpoints.MapPost("/Home",async(context)=>
+   await context.Response.WriteAsync("This is Home page");
+   });
+   })
+   
+   
+   
+   
+   
+   controller
+   these are classes that handle incoming httprequest and handle appliction logic
+   1.mvc controller->return view or view+data
+   inherit from Microsoft.Aspnetcore.mvc.controller
+   
+   public class Homecontroller:controller
+   we declare constructore to make global variable 
+   public class Homecontroller:controller
+   {
+	   public readonly ILogger<HomeController>_logger;
+	   public HomeController(ILogger<HomeController> logger)
+	   {
+		_logger=logger  
+	   }
+   }
+  2.web api controller->return data 
+   inherit controllerbase
+   
+   
+   Action methods
+   these method are always public
+   
+   many class impliment interface IActionResult or ActionResult abstract class so datatype is IActionResult or ActionResult
+   that return View(),PartialView(),json()
+   public IActionResult index(){
+   return View();
+   }
+   
+   
+   view-
+   Razor syntax -> is used to use c# in html,razor view engine -> razor view convert to html markup
+   use the @ symbol to use c# code
+   @ or @{}
+   variable in var and string in ""
+   Layout view=_Layout.cshtml it is masterpage
+   in views Layout="~/Views/Shared/_Layout.cshtml"
+   viewstart
+   it is used to define the common thing used in all view
+   
+   in _ViewStart.cshtml in views folder directly
+   @{
+   Layout="_Layout";
+   }
+   so this layout set in all file
+   for specific layout 
+   we set the specific layout by this way in that view Layout="~/Views/Shared/_Layout.cshtml"
+   we not want layout in specific views= so we set Layout=null
+   
+   _ViewImports.cshmtl
+	in order to avoid same immport in all views like we used models in view same model
+	to avoid repetation of namespace
+	@using projectname.Models 
+	in view now write only @model List<StudentModel>
+	project have multipe viewimports file it depend on which view folderit have it present on root means directly in view folder so it effect all file in view folder in home so only view that are inside 
+	home
+   
+   passing data from controller to views
+   1.ViewData
+     it is a dictionary of object that is derived from viewdatadictionary class
+	 life of viewData object only during the current request
+	 it not give compile time error it only give on run time error
+     ViewData["<key>"]=<value>;
+     @ViewData["<key>"]
+	 if we use any complex datatype array,collection,complex type so we need to do type casting
+	 to use it 
+	 (string[])ViewData["<key>"]
+   2.ViewBag
+     It is dynamic data type property of the base class of all the controllers which is the controller base class
+	 Viewbag internally use view data
+	 it exist fro current request lifecycle
+	 it also give run time error checking
+     ViewBag.key=value
+	 @ViewBag.key
+	 typecasting not required in viewbag
+	 it give error atr run time
+	 we declare viewbag access as viewdata and also viseversa also happen
+   3.TempData
+     Tempdata is an object derived from tempdata dictionary class
+     TempData["<key>"]=value 
+	 @TempData["<key>"]
+	 It is one time accessable either u use in current view or other view
+	 so it is used in current request or subsequent request
+	 it require type casting for complex datatype
+	 to make it live after access use TempData.keep(); after declare in action method and do keep in all action method in which u want 
+	 after use in view u declare in index action method so after declare do keep and then use in about view if u used in conact also so in 
+	 about action make it keep
+	 or do by this way TempData.keep("<key>")
+	 
+    4.Strongly typed views
+	To pass data from controller to views
+	The view which bind with any model
+	so we can use the model data directy in views
+	we send model from controller return View(Employee)
+	at top of view
+	write 
+	@model pdojectname.Models.Employee
+	
+	use it as @Model.id
+	
+	if we return list so 
+	@model List<pdojectname.Models.Employee>
+	or
+	@model IEnumerable<pdojectname.Models.Employee>
+
+	
+	Model or entity
+    It is c# classess that interact with data source have both propertie and methods
+	it is used to set or get data
+	model is class we make object to use it 
+	pblic class StudentModel
+	{
+	 public int rollNo {get;set;}
+	 public string Name {get;set;}
+	}
+	for one object 
+	employee emp=new employee()
+	{
+	}
+	FOR LIST OF OBJECT 
+	EMPLOYEE emp =NEW LIST<Employee>
+	{
+	new Employee(){}
+	new EMployee(){}
+	}
+	
+	| Object        | Main purpose                                                     |
+| ------------- | ---------------------------------------------------------------- |
+| **Entity**    | Represents database/domain data                                  |
+| **DTO**       | Transfers data between systems/layers, especially API boundaries |
+| **ViewModel** | Data specifically needed by a View/page                          |
+
+
+17. DTO vs Model vs ViewModel
+
+Since you were also asking about Model and ViewModel, this distinction is important.
+
+Very simplified:
+
+Entity / Model
+
+Represents your data/domain/database structure.
+
+User
+{
+    Id
+    Name
+    Email
+    PasswordHash
+}
+DTO
+
+Represents data being transferred.
+
+UserResponseDto
+{
+    Id
+    Name
+    Email
+}
+ViewModel
+
+Represents data required by a particular UI/View.
+
+For example, a registration page might need:
+
+RegisterViewModel
+{
+    Name
+    Email
+    Password
+    ConfirmPassword
+}
+
+The important idea is:
+
+Entity
+   ↓
+"What data does my application/database need?"
+
+DTO
+   ↓
+"What data do I want to transfer?"
+
+ViewModel
+   ↓
+"What data does this particular UI need?"
+	
+	
+	
+	DTO
+
+Responsible for:
+
+"What data comes into or goes out of my API?"
+
+Entity
+
+Responsible for:
+
+"What does my database data look like?"
+
+A DTO can be used simply to control what data moves between your application's layers.
+1. Imagine a normal ASP.NET Core MVC application
+
+You have:
+
+Browser
+   ↓
+Controller
+   ↓
+Service
+   ↓
+Repository
+   ↓
+Database
+
+There is no API involved.
+
+You can still have:
+
+Controller → DTO → Service → Entity → Database
+
+and on the way back:
+
+Database → Entity → Service → DTO → Controller → View
+2. Why would you use DTO then?
+
+Suppose your database Entity is:
+
+public class Employee
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; }
+
+    public string Email { get; set; }
+
+    public string PasswordHash { get; set; }
+
+    public decimal Salary { get; set; }
+
+    public bool IsActive { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+}
+
+Your Controller doesn't necessarily need the entire Employee.
+
+You could create:
+
+public class EmployeeDto
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; }
+
+    public string Email { get; set; }
+}
+
+Now your service can return:
+
+public EmployeeDto GetEmployee(int id)
+{
+    var employee = _db.Employees.Find(id);
+
+    return new EmployeeDto
+    {
+        Id = employee.Id,
+        Name = employee.Name,
+        Email = employee.Email
+    };
+}
+A DTO literally means Data Transfer Object. The "transfer" can happen:
+
+between an application and an API
+between application layers
+between services
+between processes
+or other boundaries where you want a controlled data shape
+Entity
+
+What is stored in my database/domain?
+
+Employee
+DTO
+
+What data should my service transfer?
+
+EmployeeDto
+ViewModel
+
+What data does my Razor page need?
+
+EmployeeViewModel
+
+So:
+
+             DATABASE
+                 ↑
+                 ↓
+              Entity
+                 ↑
+                 ↓
+              DTO
+                 ↑
+                 ↓
+              Service
+                 ↑
+                 ↓
+           ViewModel
+                 ↑
+                 ↓
+              View
+                 ↑
+                 ↓
+              Browser
+
+You don't need an API anywhere in this flow.
+
+The easiest rule
+
+If you're asking:
+
+"Can I use DTO in ASP.NET Core MVC without consuming an API?"
+
+Yes.
+
+If you're asking:
+
+"Should I always use DTO in MVC?"
+
+No. Use it when it gives you a useful separation between your domain/entity models and the data your application layer needs. For data specifically designed for a Razor page, a ViewModel is usually the more appropriate name/concept.
+
+
+In an ASP.NET Core MVC application, whether you use DTOs, ViewModels, or both depends on the architecture and the responsibility of each layer.
+
+For example:
+
+Simple MVC
+Browser
+   ↓
+Controller
+   ↓
+Entity
+   ↓
+Database
+
+You may not need DTOs.
+
+Layered MVC
+Browser
+   ↓
+Controller
+   ↓
+Service
+   ↓
+Repository
+   ↓
+Entity
+   ↓
+Database
+
+You might introduce DTOs to prevent entities from moving directly between layers.
+
+Larger MVC application
+Browser
+   ↓
+Controller
+   ↓
+ViewModel
+   ↓
+Service
+   ↓
+DTO
+   ↓
+Repository
+   ↓
+Entity
+   ↓
+Database
+
+Here each object has a different responsibility.
+
+So don't memorize "MVC uses ViewModel" or "API uses DTO." Instead ask:
+
+"What responsibility does this object have, and between which layers is data moving?"
+
+
+
+
+	Repository pattern
+	if we make model student.cs it represt student table in db
+	the data is interact between model and controller is done by repository it have interface and class
+	all abstract method are present in interface and impliment in class
+	
+	Repositry interact wirh dataaccess layer or dbcontext using linq
+	 so repository create abstraction layer between businnes logic and dataccess layer
+	
+	dbcontect is dataaccess layer ,model represent db table dbcontext make the datatabse 
+	context on model then repository interact with dbcontext using linq thhen dbcontext return model 
+	then repo return that model to controller
+	public interface iStudent
+	{
+	List<StudentModel> getAllStudents();
+	StudentModel getStudentById(int id);
+	}
+	
+	pubic class StudentRepository:Istudent
+	{
+	 public List<StudentModel> getAllStudents()
+	 {
+	 }
+	 public StudentModel getStudentById(int id)
+	 {
+	 }
+	}
+	
+	Service Layer
+
+			This is an important concept missing from your notes.
+
+			The service layer usually contains application/business logic.
+
+			Example:
+
+			public class EmployeeService
+			{
+				private readonly IEmployeeRepository _repository;
+
+				public async Task CreateEmployee(Employee employee)
+				{
+					// business rules
+					// calculations
+					// validation beyond basic model validation
+					// coordination of multiple operations
+
+					await _repository.AddAsync(employee);
+				}
+			}
+
+			Controller becomes thinner:
+
+			[HttpPost]
+			public async Task<IActionResult> Create(EmployeeViewModel model)
+			{
+				if (!ModelState.IsValid)
+					return View(model);
+
+				await _employeeService.CreateEmployee(...);
+
+				return RedirectToAction("Index");
+			}
+	
+	client side library
+	in order to add client side library go to project right click add client side library
+	cdn then write library and install
+	we nee to use
+	app.UseStaticFiles(); in program.cs to use static files,
+	
+	
+	
+	
+	
+	
+	
+	Tag helpers
+	special attrbute which is used to make html element to make server side component
+	Add this line in viewimport file
+	@addTagHelper *,
+	Microsoft.AspNetCore.Mvc.TagHelpers
+	asp-controller="Home" asp-action="contact"
+	asp-route-id="1"
+	Home/contact/1
+	asp-append-version="true"
+	
+	@model Taghelper.demo.employee;
+	<form asp-controller="Home" method=post asp-action="contact">
+	<input asp-for=name/>
+	</form>
+	asp-for="modelclasspropertyname"
+	<input asp-for=name/>
+	
+	for dropdown 
+	public Gender Gender {get;set;}
+	public enum Gender
+	{
+	Male,Female
+	}
+	<select asp-for="Gender" class="form-control" asp-items="Html.GetEnumSelectList<Gender>()">
+	<option value=''>select Gender </option>
+	</select>
+	or
+	List<selectListitem> Gender=new()
+	{
+	  new SelectListItem{Value="Male",Text="male"},
+	  new SelectListItem{Value="female",Text="female"}
+	}
+	@Viewbag.Gender=Gender
+	<select asp-for="Gender" class="form-control" asp-items="@Viewbag.Gender">
+	<option>select Gender </option>
+	</select>
+
+	
+	
+	for radio button
+	<input type='radio' asp-for='married' value='Yes'>
+	<input type='radio' asp-for='married' value='No'>
+	
+	checkboxes
+	
+	
+	
+	
+	label
+	<label asp-for='name'><label>
+	
+	Textarea
+	<textarea asp-for='Description'></textarea>
+	
+	 validateantiforgerytoken or csrf token
+	For cookie-authenticated web applications, CSRF protection helps prevent an attacker from tricking a user's browser into submitting an unwanted authenticated request.
+
+		Typical MVC POST:
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult Create(Employee employee)
+		{
+			...
+		}
+
+		Razor forms can generate the anti-forgery token automatically with the Form Tag Helper.
+   Model Binding
+	map http request to action method parameter
+	bind the the http request with action method parameter is called model binding
+	
+	after in form we make parameter of that class
+	[HttpPost]
+	public string Index(Employee e)
+	{
+	 return 
+	} 
+	
+	Model Validation
+	client and server side 
+	on client side 
+	jquery-validation is usually involved
+
+		In a typical MVC project, you'll often have scripts such as:
+
+		<script src="jquery.js"></script>
+		<script src="jquery.validate.js"></script>
+		<script src="jquery.validate.unobtrusive.js"></script>
+
+		These scripts read the validation metadata generated by ASP.NET Core.
+
+		Conceptually:
+
+		C# Model
+		   ↓
+		[Required]
+		[EmailAddress]
+		   ↓
+		Razor Tag Helpers
+		   ↓
+		HTML data-val-* attributes
+		   ↓
+		jQuery Unobtrusive Validation
+		   ↓
+		Browser validates form
+	1.Validation message tag halper
+	<span asp-validation-for="Name"></span>
+	
+	All attribute are present System.componenet.DataAnnotation
+	{Required]or{Required(ErrorMessage="name is must")]
+	[Stringlength(15,MinimumLength=3,ErrorMessage="Nameis between")]
+	{maxLenth(15)]
+	[EmailAddress]
+	[DataType(DataType.password)] to make show password in bullet
+	[Range(10,50)]
+	[Regularexpression("thh780/;[[")]
+	[compare("password")]->like password and confirm paasword
+	[url]
+	[Display(Name="Enter Confir Password")] use to show on labe when we make label by asp-for
+	or in controller
+	if(ModelState.IsValid)
+	{
+	
+	}
+	2.Validation Sumarry Tag helper
+	above form it show as unordered list
+	<div asp-validation-summary="All">
+	</div>
+	
+	
+	Entity framework core is orm(object relational mapping framework)
+	it is to make map class or domain object with relational db we generate class to table and viseversa by orm
+	Two approach
+	1.code first
+	  existing model class to generate db table
+	  we make model class and dbcontext class and migration then we run migration
+	  Need to install
+	  entityframeworkcore.sqlserver,tools(manage migrationand and scaffold(automatic generation of code) dbmigration),design(design-time logic for db generation)
+	  1. create model class in model folder
+	    public class Student
+		{
+		[key]-> to make primary key
+		 public int Id{get;set;}
+		 [Column("StudentName",TypeName="varchar(100)"]
+		 public int Name{get;set;}
+		 [Column("StudentGender",TypeName="varchar(20)"]
+		 public int Gender{get;set;}
+		 public int Age{get;set;}
+		}
+		2.createdbcontext
+		 public class StudentDBContext:DbContext
+		 {
+		    public StudentDBContext(DbContextOptions<StudentDBContext> options):base(options)
+			{
+			
+			}
+			pubic dbSet<Student> Students{get; set;}
+		 }
+		 Dbcontext class is integral part of entity framework
+		 Dbset<T> is generic
+		Dbcontextoptions carries informationsuch as connection string ,db provider
+		3.create connection string in appsetting .json
+		"ConnectionStrings":{
+		"dbcs":"Server=;Database=;Trusted_Connection=True(window authentication)"
+		}
+		4. register in program.cs
+		before builder.build
+		var provider=builder.Services.BuildServiceProvider();
+		var config=provider.GetRequiredService<IConfiguration>();
+		builder.Services.AddDbContext<StudentDBContext>(item=>item.UseSqlServer(config.GetConnectionString("dbcs")))
+		5 Add migration and run migration
+		in nuget console
+	    add-migration codefirstdb
+		update-database
+		
+		how to use it 
+		
+		Read
+		private readonly StudentDBContext studentDB
+		public HomeController(StudentDBContext studentDB)
+		{
+		 this.studentDB=studentDB
+		}
+		public async Task<IActionResult> Index()
+		{
+		vat stddata=await studentDB.students.ToListAsync()
+		return view(stdDB)
+		}
+		@model IEnumerable<codeFirstASPCores6.Models.Student>
+		<thead>
+		<tr>
+		<th>
+		@Html.DisplayNameFor(model=>model.Name)
+		</th>
+		<th>
+		@Html.DisplayNameFor(model=>model.Gender)
+		</th>
+		
+		</tr>
+		</thead>
+		<tbody>
+		@foreach(var item in Model){
+		<tr>
+		<td>
+		@html.DisplayFor(modelitem=>item.Name)
+		</td>
+		<td>
+		@html.DisplayFor(modelitem=>item.Gender)
+		</td>
+		</tr>
+		}
+		</tbody>
+		
+		
+		insert or create
+		[HttpPost]
+		public async Task<IActionResult> Create(Student std )
+		{
+		if(ModelState.IsValid)
+		{
+		  await studentDB.Students.AddAsync(std);
+		  await studentDb.SaveChangesAsync();
+		  return RedirectToAction("Index","Home");
+		}
+		  return View(std);
+		}
+		
+		
+		
+		
+		Detail
+		public async Task<IActionResult> Detail(int id)
+		{
+		 if(id==null||studentsDB.Students==null)
+		 {
+		  return NotFound();
+		 }
+		  var stddata=await studentDB.Students.FirstorDefaultAsync(x=>x.Id==id);
+		   if(stddata==null)
+		   {
+		    return NotFound;
+		   }
+		  return View(stddata);
+		}
+		
+		
+		Edit 
+	public async Task<IActionResult> Edit(int? id)
+		{
+		 if(id==null||studentsDB.Students==null)
+		 {
+		  return NotFound();
+		 }
+		 var stddata=await studentDB.Students.FindAsync(id);
+		    if(stddata==null)
+		   {
+		    return NotFound;
+		   }
+		  return View(stddata);
+		}
+		[HttpPost]
+		public async Task<IActionResult> Edit(int? id,Student std)
+		{
+		if(id!=std.Id){
+		return NotFound();
+		}
+		if(ModelState.IsValid)
+		{
+		  studentDB.Students.Update(std);
+		  await studentDb.SaveChangesAsync();
+		  return RedirectToAction("Index","Home");
+		}
+		  return View(stddata);
+		}
+		
+		
+		Delete
+		
+		 public async Task<IActionResult> Delete(int? id)
+		  {
+		  if(id==null||studentsDB.Students==null)
+		 {
+		  return NotFound();
+		 }
+		 
+		   var stddata=await studentDB.Students.FirstorDefaultAsync(x=>x.Id==id);
+		     if(stddata==null)
+		 {
+		  return NotFound();
+		 }
+		  return view(stdData);
+		  }
+		  
+		  [HttpPost,ActionName("Delete")]
+		  public async Task<IActionResult> DeleteConfirmed(int? id)
+		  {
+		    var stdData= await studentDB.Students.FindAsync(id);
+			if(stdData!=null)
+			{
+			studentDB.Students.Remove(stddb)
+			}
+			await studentDB.SaveChangesAsync();
+			return redirecttoaction("Home","index")
+		  }
+		  
+		  
+		  
+	2.database First Approach
+	 already make table and according to that make model class in code automatically and db context class
+	 by running scaffold dbcontext command
+	 steps
+	 step1 install entiityframeworkcore.sqlserver,tools,design
+	 step2 scaffold-DbContext "server=zServername;database=DatabaseName;trusted_connection=true"
+	       Microsoft.EntityFrameworkcore.sqlserver -OutputDir Models
+	        to reflect runtime changes just add -force at end of command and run
+	 step3 move connection string from dbcontext to appsetting
+	 step 4 register in program.cs
+	 
+	 
+	 
+	 
+	
+   session
+    store user specific data for specific time
+	when browser session end session are deleted
+	session are server side
+	step1
+	before build add this line 
+	builder.services.AddSession();
+	after build
+	app.useSession();
+	
+	step2 
+	create session Httpcontext.Session.SetString("key","value")
+	step3
+	get Httpcontext.Session.GetString("key")
+	step4
+	remove Httpcontext.Session.RemoveString("key")
+	by default it remove after 20  min
+	to directly access in view use 
+	at top
+	@inject Microsoft.AspNetCore.http.IHttpContextAccessor accessor
+	in program .cs
+	builder.services.AddSingelton<IhttpcontextAccessor,Httpcontextaccessor>();
+	h1>@accessor.Httpcontext.Session.GetString("key")</h1>
+	
+	
+Bind multiple model with s single view or view model
+multiple model combine to make viewmodel then we bind viewmodel to view
+
+multiplmake model in one model and then use it in view and return from controller 
+public class schoolViewModel{
+public List<School>mystudent{get;set;}
+public list<Teacher>myteacher{get;set;}
+}
+in controller 
+SchoolViewmodel svm=new SchoolVieModel()
+{
+mystudent=student,
+myteacher=teacher
+}
+
+
+Partial Views
+in shared folder
+ it is sub nested or inner view of main view
+ it is used to reused that view in some main views  
+ example:employeeName.cshtml
+ <partial name="_EmployeeName/>
+1.atatic partial view- no model
+2.dynamic partial view=with model
+Strongly typed partial View
+bind partial view with model
+
+@foreach(var item in Model)
+{
+ <div>
+ <partial name="_ProductpartialView" model=item"/>
+ </div>
+}
+
+@model partialViewASPCore.Models.product
+<div>
+@Model.Name
+@Model.Description
+</div>
+
+
+
+webapi
+api is a subroutine defination,protocol and tools for 
+building software and application so same logic for 
+different application not need to write seperately
+
+
+transfer data in form of json or xml
+which have http protocol
+get post put delete
+
+asp.net core web api is a framework that allow to make 
+restful api
+representational state transfer
+url - uniform resource locator
+
+follow client server architecture
+stateless
+cacheable
+check enable api syupport that give swagger 
+controller base :it provide set of properties and method use to handle
+http request and generate http response
+
+ApiController attribute
+enable attribute routing,automatic model validation,binding source parameter infrence
+
+[ROute("api/[controller]")]
+[ApiController]
+public class StudentAPIController:ControllerBase
+{
+ [HttpGet("{id}")]
+ return Ok(data)
+ BadRequest()
+ NotFOund()
+}
+
+on client side
+private HttpClient client=new HttpClient();
+[HttpGet]
+public IActionResult Index()
+{
+		HttpResponseMessage response=client.getAsync(url).Result;
+		if(response.IssuccessStatusCode)
+		{
+			strung result=response.Content.ReadAsStringAsync().Result;
+			var data=JsonConvert.DeserializeObject<List<Student>>(result);
+			if(data!=null)
+			{
+				Students=data;
+			}
+		}
+}
+[HttpPost]
+public IActionResult Index(Student std)
+{
+		var data=JsonConvert.SerializeObject(std);
+		StringContent content=new StringContent(Data,Encoding.UTF8,"Application/JSON")
+		HttpResponseMessage response=client.PostAsync(url,content).Result;
+		if(response.IssuccessStatusCode)
+		{
+			strung result=response.Content.ReadAsStringAsync().Result;
+		
+			if(data!=null)
+			{
+				Students=data;
+			}
+		}
+}
+
+
+Authentication and authorization
+to check credential that it s identity valid or not
+authorization that what privaligaed it have what access it have
+
+
+identity framework
+built in membership system to handle user info.
+and do auth and authorization and related all functionlity
+step 1 add identity to project 
+right click -> Add -> new scaffold item -> identity add
+step 2 select layout and feature create datacontext class and user class Then Area folder form
+step 3 Add register login link in nav bar 
+in layout
+<partial name="_LoginPartial"/>
+in program.cs
+app.MapRazorPages();
+step4 Add some property in applicatioonUser class
+		public class Applicationuser:Identityuser
+		{
+		 public string FirstName{get;set;}
+		 public string LastName{get;set;}
+		}
+in dbcontext in modelcreating 
+		protected override void onModelCreating(ModelBuilder builder)
+		{
+	    	base.OnModelCreating(builder);
+            builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
+		}
+		
+		public class ApplicationUserEntityConfiguration:IEntityTypeConfiguration<ApplicationUser>
+		{
+		 public void Configure(EntityTypeBuilder<Applicationuser> builder)
+		 {
+		   builder.Property(x=>x.FirstName).HasmaxLength(255);
+		   builder.Property(x=>x.LastName).HasmaxLength(255);
+		 }
+		}
+
+step5 add conection string in appsetting.json	
+step6 add migration	
+   Add-Migration InitialMigration
+   update database
+   
+
+Areas 
+Seperate functionality in same webapp so we use area
+  project right click ->Add scallfold item ->mvc area
+ 
+in program.cs
+place above your conventionlay pattern middleware
+ app.MapControllerRoute(
+ name:"myarea"
+ pattern:"{area:exists}/{controller=Home}/{action=Index}/{id?}" 
+ ) 
+ 
+ in contrroller above controller write [Area("Blogs")]
+ in tag helper write asp-area="Blogs"
+ 
+ 
+Jwt
+ jsonweb token
+ it is used to securely transfer information between client and server it is used for both auth and authz
+ http is a stateless protocol that it not remeber what they send in previous response
+ 
+ if we used SESSIOn only then we have multiple server for example session generate on first server
+ but next request goes on another server which not have session 
+ 
+ so when we login server genrate token which have payload and all infor which we send to client that client send on every request
+ so it authenticate and authorize on every request
+ jwt => header.payload.signature
+ 
+ so jwt is encode and decode by base64
+ header have algorithm and type
+ {
+ "alg":"HS256",
+ "type":"JWT"
+ }
+ alg is is to verify signature and how we can sign token
+ signature made by header ,payload and secreat key
+step1: install jwt bearer package
+step2:in program .cs 
+builder.services.AddAuthentication(options=>
+	{
+		options.DefaultAuthenticateScheme=jwtBearerDefaults.AuthenticateScheme;
+		options.DefaultChallengeScheme=JwtBearerDefaults.AuthenticateScheme;
+	}).AddJwtBearer(x=>
+     {
+           x.RequiredHttpsMetadata=false;
+		   x.saveToken=true;
+		   x.TokenValidationParameters=new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+		   {
+		    validateIssuer=false,
+			validateAudience=false,
+			ValidateLifetime=true,
+			ValidateIssuerSigningKey=trrue,
+			IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes("jfkrji86tuijjf5bi55ioi9"))
+			
+		   };
+		   x.Events=newJwtBearerEvents{
+		   OnMessageRecevied=context=>
+		   {
+		     var token=context.Request.Cookies["jwt_key"];
+			 if(!string.isNullOrEmpty(token))
+			 {
+			  context.token=token
+			 }
+			 return Task.CompletedTask;
+		   },
+		   OnChallenge=context=>
+		   {
+		     context.HandleResponse(),
+			 context.Response.Redirect("/");
+			 returnTask.CompletedTask;
+		   }
+		   }
+      }); 
+	  app.UseAuthentication()before authorization
+ step3:
+ private string GenerateJwtToken(UserDto dto)
+ {
+ varjwtHandler=newJwtSecurrityTokenHandler();
+ var key=Encoding.UTF8.GetBytes("juohjouhuiojip")
+ var tokenDescriptior=new SecurityTokenDescriptor
+ {
+   Subject=newSystem.Security.Claims.ClaimsIdentiy(new[]
+   {
+     new Claim(ClaimTypes Name ,dto.Email)
+   }),
+   Expires=DateTime.UtcNow.AddMinute(30),
+   SigningCredentials=newSigningCredentials(new SymmetricSecurityKey(key),SecurityAlgorithms.HmacSha256Signature)
+ },
+ var token = jwtHandler.CreateToken(tokenDescriptor);
+ return jwtHandler.writeToken(token);
+ }
+ 
+ 
+ after succesfull credential match in login
+ var token - GenerateJwtToken(dto);
+ Response.Cookies>Append("jwt_key",token,newCookieOptions
+ {
+  HttpOnly=true,
+  Secure=true,
+  SameSite=SameSiteMode.Strict,
+  Expires=DateTime.UtcNow.AddMinutes(30)
+  })
+
+ step4:
+ add [Authorize] attribute above controller
+ 
+ 
+ microservices
+ it is an architectural style where application divided into 
+ small independent services instead of create one large applicatioon( monolethic)
+ make independent service that are communicate by api
+ each service as its seperate db that deploy independently
+ 
+ so we make web api project in which one solution have multiple project
+ in which one microservice call other by calling its api
